@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from "axios";
 import "./login.css"
 
 export default function Login() {
@@ -6,16 +7,33 @@ export default function Login() {
     const [password, setPassword] = useState("");
 
 
+
     //esta funcion se ejecuta cuando se le da clic al Submmit
-    const validarSesion = (e) => {
+    const validarSesion = async (e) => { //async nos permite utilizar await para esperar respuesta del servidor
         e.preventDefault(); //evitamos que React recargue la pagina en automatico
         console.log("Usuario: ", usuario) //Imprimimos los valores en la consola
         console.log("Password: ", password)
+        //alert("AQUI VALIDAMOS LA SESION CON AXIOS")
 
-        alert("AQUI VALIDAMOS LA SESION CON AXIOS")
+        try {
+            //Enviamos una peticion POST al servidor, con await esperamos a obtener una respuesta
+            //Los datos se envian en formato JSON
+            const res = await axios.post("http://localhost:3001/login", {
+                usuario,
+                password
+            })
+
+            if (res.data.success) { //Validamos si la respuesta fue exitosa
+                alert("LOGIN EXITOSO!")
+            }
+
+        } catch (error) {
+            alert("Usuario o contraseña incorrecta")
+        }
+
     };
 
-    
+
     return (
         <div id="login">
             <form onSubmit={validarSesion}>
