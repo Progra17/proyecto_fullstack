@@ -1,7 +1,9 @@
 //import logo from './logo.svg';
 //import './App.css';
 
-import Login from "./components/login/login";
+import Login from "./components/login";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import Home from "./components/home";
 
 
 /*<header className="App-header">
@@ -21,9 +23,14 @@ import Login from "./components/login/login";
 
 function App() {
   return (
-    <div className="App">
-      <Login />
-    </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Login />}/> {/*Pantalla de Login*/}
+
+      <Route path="/home" element={<Home />}/> {/*Pantalla de Bienvenida*/}
+    </Routes>
+
+    </BrowserRouter>
   );
 }
 

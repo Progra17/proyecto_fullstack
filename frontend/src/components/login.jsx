@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import "./login.css"
 
 export default function Login() {
     const [usuario, setUsuario] = useState(""); //Creamos la variable y con set se actualizan los valores
     const [password, setPassword] = useState("");
 
-
+    const navigate = useNavigate();
 
     //esta funcion se ejecuta cuando se le da clic al Submmit
     const validarSesion = async (e) => { //async nos permite utilizar await para esperar respuesta del servidor
         e.preventDefault(); //evitamos que React recargue la pagina en automatico
-        console.log("Usuario: ", usuario) //Imprimimos los valores en la consola
-        console.log("Password: ", password)
+        //console.log("Usuario: ", usuario) //Imprimimos los valores en la consola
+        //console.log("Password: ", password)
         //alert("AQUI VALIDAMOS LA SESION CON AXIOS")
 
         try {
@@ -24,7 +25,7 @@ export default function Login() {
             })
 
             if (res.data.success) { //Validamos si la respuesta fue exitosa
-                alert("LOGIN EXITOSO!")
+                navigate("/home")
             }
 
         } catch (error) {
@@ -35,6 +36,8 @@ export default function Login() {
 
 
     return (
+        
+            
         <div id="login">
             <form onSubmit={validarSesion}>
                 <h1>INICIO DE SESIÓN</h1>
@@ -56,6 +59,7 @@ export default function Login() {
                 <button type="submit">INICIAR SESION</button>
             </form>
         </div>
+        
     )
 }
 

@@ -7,3 +7,4 @@ npm install cros
 Para la carpeta frontend se realizaron los siguientes comandos
 npx create-react-app proyecto_fullstack
 npm install axios
+npm install react-router-dom
