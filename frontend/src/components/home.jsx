@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import "./home.css"
+import Proyecto from './proyecto'
 
 
 export default function Home() {
@@ -49,7 +50,7 @@ export default function Home() {
             <div className="contenedor-notas">
                 {/*Se genera un mapa de la variable notas, es decir, se recorre cada elemento del arreglo*/}
                 {notas.map(nota => ( //por cada objeto o nota, se genera su respectivo bloque de HTML
-                    <div className="nota" key={nota.id}> 
+                    <div className="nota" key={nota.id}>
                         <img src={nota.img} alt={nota.titulo} />
                         <h3>{nota.titulo}</h3>
                         <p>{nota.texto}</p>
@@ -57,8 +58,9 @@ export default function Home() {
                 ))}
             </div>
 
-           
-            </div>
-       
+            <Proyecto />
+            
+        </div>
+
     )
 }

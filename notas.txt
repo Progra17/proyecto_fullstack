@@ -1,8 +1,18 @@
 Para la carpeta backend se realizaron los siguientes comandos:
 npm init -y
 npm install express
-npm install cros
+npm install cors
+npm install mysql
 
+Para establecer conexion de manera correcta con el servidor, mysql indica el siguiente error:
+code: 'ER_NOT_SUPPORTED_AUTH_MODE',
+  errno: 1251,
+  sqlMessage: 'Client does not support authentication protocol requested by server; consider upgrading MySQL client',
+  sqlState: '08004',
+  fatal: true
+Se debe ejecutar lo siguiente en la linea de comandos de Mysql o en una consulta de MySql Workbench lo siguiente:
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '2Link001';
+FLUSH PRIVILEGES;
 
 Para la carpeta frontend se realizaron los siguientes comandos
 npx create-react-app proyecto_fullstack
