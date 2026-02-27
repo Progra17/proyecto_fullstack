@@ -34,7 +34,7 @@ app.post('/login', (req, res) => { //Define una ruta POST
 
 });
 
-//Creamos un endpoint para obtener los datos
+//Endpoint para obtener todos los proyectos
 app.get('/proyecto', (req, res) => {
     connection.query('SELECT * FROM proyecto', (error, results) => {
         if (error) throw error;
@@ -42,21 +42,20 @@ app.get('/proyecto', (req, res) => {
     });
 });
 
+//Endpoint para obtener todos los proyectos
+app.get('/empleado', (req, res) => {
+    connection.query('SELECT * FROM empleado', (error, results) => {
+        if (error) throw error;
+        res.json(results);
+    });
+});
 
-
-app.get('/api/notas', (req, res) => { //Crea una ruta tipo GET, con la direccion /api/notas
-    //en este caso no hay datos que necesite de requerimiento, ya que solo cargara las notas como respuesta
-    res.json([ //La respuesta se comparte en tipo JSON, donde cada objeto es una nota
-        { id: 1, titulo: "Tecnología en 2024", texto: "Avances en IA y automatización transforman industrias.", img: "https://picsum.photos/400/200" },
-        { id: 2, titulo: "Salud y Bienestar", texto: "Tendencias en hábitos saludables y medicina preventiva.", img: "https://picsum.photos/400/201" },
-        { id: 3, titulo: "Economía Global", texto: "Expectativas económicas ante un nuevo panorama internacional.", img: "https://picsum.photos/400/202" },
-        { id: 4, titulo: "Desarrollo Web", texto: "Nuevos frameworks y prácticas para el frontend moderno.", img: "https://picsum.photos/400/203" },
-        { id: 5, titulo: "Espacio y Ciencia", texto: "Nuevos descubrimientos sobre exoplanetas cercanos.", img: "https://picsum.photos/400/204" },
-        { id: 6, titulo: "Medio Ambiente", texto: "Acciones urgentes frente al cambio climático.", img: "https://picsum.photos/400/205" },
-        { id: 7, titulo: "Cultura Digital", texto: "Cómo las redes sociales moldean la sociedad actual.", img: "https://picsum.photos/400/206" },
-        { id: 8, titulo: "Educación Moderna", texto: "Tendencias en aprendizaje híbrido y remoto.", img: "https://picsum.photos/400/207" },
-        { id: 9, titulo: "Innovación Empresarial", texto: "Métodos ágiles y transformación tecnológica en empresas.", img: "https://picsum.photos/400/208" }
-    ]);
+//Endpoint para obtener todos los proyectos
+app.get('/tarea', (req, res) => {
+    connection.query('SELECT * FROM tarea', (error, results) => {
+        if (error) throw error;
+        res.json(results);
+    });
 });
 
 app.listen(PORT, () => {

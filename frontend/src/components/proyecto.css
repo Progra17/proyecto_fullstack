@@ -1,0 +1,36 @@
+.contenedor-proyecto {
+    display: grid; /*Convierte el contenedor en una cuadricula*/
+    /*Con esto mete tantas columnas como quepan automaticamente*/
+    /*Cada tarjeta tendra un minimo de 240 px y un maximo de 1 fraccion del ancho*/
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+    gap: 20px; /*Espacio de 20 pixles entre tarjetas*/
+    padding: 20px;
+    max-width: 80%; /*Hacemos que el contenedor ocupe como maximo el 80% de la ventana del navegador*/
+    margin: auto;
+}
+
+.proyecto {
+    background: white;
+    border-radius: 15px; /*Borde redondeado para cada tarjeta de las notas*/
+    overflow: hidden; /*Si algo se sale de la tarjeta de la nota, lo recorta*/
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /*Sombra ligera*/
+    /*Con esto hacemos que cualquier cosa que modifique o transforme se anime de manera suave*/
+    transition: transform 0.3s; 
+    cursor: pointer; /*Al pasar por encima el mouse, se tranforma en una mano*/
+}
+
+.proyecto:hover { /*Genera el efecto de que se "levanta"*/
+    transform: translateY(-5px);
+}
+
+
+.proyecto h3 {
+    margin: 10px;
+    font-size: 1.2rem;
+}
+
+.proyecto p {
+    margin: 10px;
+    font-size: 0.9rem;
+    color: #444;
+}

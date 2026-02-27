@@ -1,33 +1,20 @@
-//import logo from './logo.svg';
-//import './App.css';
-
 import Login from "./components/login";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./components/home";
+import Empleado from "./components/empleado";
+import Proyecto from "./components/proyecto";
+import Tarea from "./components/tarea";
 
-
-/*<header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>*/
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />}/> {/*Pantalla de Login*/}
-
-      <Route path="/home" element={<Home />}/> {/*Pantalla de Bienvenida*/}
+      <Route path="/home" element={<Home />}/> {/*Pantalla de Inicio*/}
+      <Route path="/proyecto" element={<Proyecto />}/> {/*Pantalla de Proyectos*/}
+      <Route path="/tarea" element={<Tarea />}/> {/*Pantalla de Tareas*/}
+      <Route path="/empleado" element={<Empleado />}/> {/*Pantalla de Empleados*/}
     </Routes>
 
     </BrowserRouter>
