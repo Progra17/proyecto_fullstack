@@ -54,8 +54,20 @@ app.get('/empleado', (req, res) => {
 
 //Endpoint para obtener todas las tareas
 app.get('/tarea', (req, res) => {
-    connection.query('SELECT * FROM tarea', (error, results) => {
-        if (error) throw error;
+    const sql = `
+        SELECT 
+            t.*,
+            p.nombre_proyecto,
+            CONCAT(e.primer_nombre, ' ', e.apellido_paterno) AS nombre_empleado
+        FROM tarea t
+        LEFT JOIN proyecto p ON p.id_proyecto = t.id_proyecto
+        LEFT JOIN empleado e ON e.id_empleado = t.id_empleado;
+    `;
+    connection.query(sql, (error, results) => {
+        if (error) {
+            console.error("Error en consulta de tareas con JOIN:", error);
+            return res.status(500).json({ error: "Error en consulta de tareas" });
+        }
         res.json(results);
     });
 });

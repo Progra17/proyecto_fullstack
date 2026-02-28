@@ -370,13 +370,14 @@ export default function Tarea() {
                             <p><b>COMENTARIOS:</b> {t.comentarios_tarea}</p>
                             <p><b>F. INICIO:</b> {new Date(t.fecha_inicio).toISOString().split("T")[0]}</p>
                             <p><b>F. FIN:</b> {new Date(t.fecha_fin).toISOString().split("T")[0]}</p>
-                            <p><b>PROYECTO:</b> {t.id_proyecto}</p>
-                            <p><b>EMPLEADO:</b> {t.id_empleado}</p>
+                            <p><b>PROYECTO:</b> {t.nombre_proyecto}</p>
+                            <p><b>EMPLEADO:</b> {t.nombre_empleado}</p>
                         </div>
                         <button onClick={() => eliminarTarea(t.id_tarea)}>Eliminar</button>
                     </div>
                 ))}
             </div>
+
         </div>
     )
 }
