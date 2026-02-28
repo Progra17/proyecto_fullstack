@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import "./empleado.css"
+import Barra_superior from './barra_superior';
 
 export default function Empleado() {
 
@@ -14,6 +15,7 @@ export default function Empleado() {
 
     return (
         <div>
+            <Barra_superior />
             <div className='contenedor-empleado'>
                 {empleado.map(e => (
                     <div className='empleado' key={e.id_empleado}>

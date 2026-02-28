@@ -11,9 +11,6 @@ export default function Home() {
     return (
         <div>
             <Barra_superior />
-            <Proyecto />
-            <Empleado />
-            <Tarea />
         </div>
 
     )

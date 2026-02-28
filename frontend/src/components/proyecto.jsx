@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import "./proyecto.css"
+import Barra_superior from './barra_superior';
 
 
 export default function Proyecto() {
@@ -16,6 +17,7 @@ export default function Proyecto() {
     return (
         <div>
 
+            <Barra_superior />
             <div className='contenedor-proyecto'>
                 {proyecto.map(p => (
                     <div className='proyecto' key={p.id_proyecto}>

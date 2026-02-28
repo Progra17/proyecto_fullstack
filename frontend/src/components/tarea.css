@@ -34,3 +34,18 @@
     font-size: 0.9rem;
     color: #444;
 }
+
+.form-tarea {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    margin-bottom: 30px;
+}
+
+.form-tarea input,
+.form-tarea select,
+.form-tarea button {
+    padding: 8px;
+    font-size: 16px;
+}

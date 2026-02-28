@@ -34,6 +34,8 @@ app.post('/login', (req, res) => { //Define una ruta POST
 
 });
 
+
+//LEER (READ)
 //Endpoint para obtener todos los proyectos
 app.get('/proyecto', (req, res) => {
     connection.query('SELECT * FROM proyecto', (error, results) => {
@@ -42,7 +44,7 @@ app.get('/proyecto', (req, res) => {
     });
 });
 
-//Endpoint para obtener todos los proyectos
+//Endpoint para obtener todos los empleados
 app.get('/empleado', (req, res) => {
     connection.query('SELECT * FROM empleado', (error, results) => {
         if (error) throw error;
@@ -50,13 +52,94 @@ app.get('/empleado', (req, res) => {
     });
 });
 
-//Endpoint para obtener todos los proyectos
+//Endpoint para obtener todas las tareas
 app.get('/tarea', (req, res) => {
     connection.query('SELECT * FROM tarea', (error, results) => {
         if (error) throw error;
         res.json(results);
     });
 });
+
+//CREAR (CREATE)
+//Endpoint para crear una tarea
+app.post('/tarea', (req, res) => {
+    const {
+        nombre_tarea,
+        descripcion_tarea,
+        estatus_tarea,
+        comentarios_tarea,
+        fecha_inicio,
+        fecha_fin,
+        id_proyecto,
+        id_empleado
+    } = req.body;
+
+    const sql = `
+        INSERT INTO tarea 
+        (nombre_tarea, descripcion_tarea, estatus_tarea, comentarios_tarea, fecha_inicio, fecha_fin, id_proyecto, id_empleado)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    connection.query(sql, [
+        nombre_tarea,
+        descripcion_tarea,
+        estatus_tarea,
+        comentarios_tarea,
+        fecha_inicio,
+        fecha_fin,
+        id_proyecto,
+        id_empleado || null
+    ], (error, result) => {
+        if (error) throw error;
+        res.json({ message: "Tarea creada correctamente", id: result.insertId });
+    });
+
+});
+
+//ACTUALIZAR (UPDATE)
+//Endpoint para actualizar una tarea
+app.put('/tarea/:id', (req, res) => {
+    const { id } = req.params; // ID de la tarea a actualizar
+    const {
+        nombre_tarea,
+        descripcion_tarea,
+        estatus_tarea,
+        comentarios_tarea,
+        fecha_inicio,
+        fecha_fin,
+        id_proyecto,
+        id_empleado
+    } = req.body;
+
+    const sql = `
+        UPDATE tarea
+        SET nombre_tarea = ?, 
+            descripcion_tarea = ?, 
+            estatus_tarea = ?, 
+            comentarios_tarea = ?, 
+            fecha_inicio = ?, 
+            fecha_fin = ?, 
+            id_proyecto = ?, 
+            id_empleado = ?
+        WHERE id_tarea = ?
+    `;
+
+    connection.query(sql, [
+        nombre_tarea,
+        descripcion_tarea,
+        estatus_tarea,
+        comentarios_tarea,
+        fecha_inicio,
+        fecha_fin,
+        id_proyecto,
+        id_empleado || null,
+        id
+    ], (error, result) => {
+        if (error) throw error;
+        res.json({ message: "Tarea actualizada correctamente", affectedRows: result.affectedRows });
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log(`Servidor backend iniciado en http://localhost:${PORT}`);
