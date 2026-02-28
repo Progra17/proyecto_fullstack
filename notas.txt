@@ -11,7 +11,7 @@ code: 'ER_NOT_SUPPORTED_AUTH_MODE',
   sqlState: '08004',
   fatal: true
 Se debe ejecutar lo siguiente en la linea de comandos de Mysql o en una consulta de MySql Workbench lo siguiente:
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '2Link001';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'contraseña del usuario';
 FLUSH PRIVILEGES;
 
 Para la carpeta frontend se realizaron los siguientes comandos
