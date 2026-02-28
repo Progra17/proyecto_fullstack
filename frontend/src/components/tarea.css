@@ -1,84 +1,228 @@
-    .contenedor-tarea {
-        display: grid;
-        /*Convierte el contenedor en una cuadricula*/
-        /*Con esto mete tantas columnas como quepan automaticamente*/
-        /*Cada tarjeta tendra un minimo de 240 px y un maximo de 1 fraccion del ancho*/
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 20px;
-        /*Espacio de 20 pixles entre tarjetas*/
-        padding: 20px;
-        max-width: 80%;
-        /*Hacemos que el contenedor ocupe como maximo el 80% de la ventana del navegador*/
-        margin: auto;
-    }
+.contenedor-tarea {
+    display: grid;/*Convierte el contenedor en una cuadricula*/
+    /*Con esto mete tantas columnas como quepan automaticamente*/
+    /*Cada tarjeta tendra un minimo de 240 px y un maximo de 1 fraccion del ancho*/
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    /*Espacio de 20 pixles entre tarjetas*/
+    padding: 20px;
+    max-width: 80%;
+    /*Hacemos que el contenedor ocupe como maximo el 80% de la ventana del navegador*/
+    margin: auto;
+}
 
-    .tarea {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background: white;
-        border-radius: 15px;
-        /*Borde redondeado para cada tarjeta de las notas*/
-        border: 2px solid transparent;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        /*Sombra ligera*/
-        /*Con esto hacemos que cualquier cosa que modifique o transforme se anime de manera suave*/
-        transition: transform 0.3s;
-    }
+.tarea {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: white;
+    border-radius: 15px;
+    /*Borde redondeado para cada tarjeta de las notas*/
+    border: 2px solid transparent;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    /*Sombra ligera*/
+    /*Con esto hacemos que cualquier cosa que modifique o transforme se anime de manera suave*/
+    transition: transform 0.3s;
+    cursor: default;
+}
 
-    .tarea-content {
-        /*Wrapper para todo el contenido excepto el botón */
-        flex-grow: 1;
-        /*Ocupa todo el espacio posible */
-    }
+.tarea-content {
+    /*Wrapper para todo el contenido excepto el botón */
+    flex-grow: 1;
+    /*Ocupa todo el espacio posible */
+}
 
-    .tarea button:hover {
-        background-color: #d32f2f;
-    }
+.tarea button:hover {
+    background-color: #d32f2f;
+}
 
-    .tarea button {
-        width: 100%;
-        /*Ocupa todo el ancho de la tarjeta */
-        padding: 5px;
-        border: none;
-        border-top: 1px solid #ccc;
-        background-color: #f44336;
-        color: white;
-        font-weight: bold;
-        border-radius: 0 0 15px 15px;
-        /*Redondear solo abajo*/
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+.tarea button {
+    width: 100%;
+    /*Ocupa todo el ancho de la tarjeta */
+    padding: 5px;
+    border: none;
+    border-top: 1px solid #ccc;
+    background-color: #f44336;
+    color: white;
+    font-weight: bold;
+    border-radius: 0 0 15px 15px;
+    /*Redondear solo abajo*/
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-    .tarea:hover {
-        /*Genera el efecto de que se "levanta"*/
-        transform: translateY(-5px);
-        border-color: #557CFA;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+.tarea:hover {
+    /*Genera el efecto de que se "levanta"*/
+    transform: translateY(-5px);
+    border-color: #557CFA;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+h3 {
+    margin: 10px 0;
+    font-size: 2rem;
+    text-align: center;
+    color: #557CFA;/* mismo azul que el borde hover */
+}
+
+.tarea p {
+    margin: 4px 10px;
+    /* más margen horizontal para no pegar el texto al borde */
+    font-size: 0.9rem;
+    line-height: 1.4;
+    /* hace que sea más fácil de leer */
+    color: #333;
+    /* gris oscuro en lugar de negro puro */
+}
+
+.tarea p b {
+    color: #000;
+    /* destaca solo el label */
+    font-weight: 600;
+    /* más sutil que bold completo */
+}
+
+    /* Fondo oscuro */
+.modal-fondo {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+    z-index: 999;
+}
+
+/* Caja del modal */
+.modal {
+    background: white;
+    padding: 25px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    animation: aparecer 0.3s ease-out;
+
+    max-height: 80vh;       /* límite de altura */
+    overflow-y: auto;       /* scroll vertical */
+    scrollbar-width: thin;  /* delgado en Firefox */
+    scrollbar-color: #557CFA #ddd; /* colores */
+}
+
+/* Animación */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Botón inferior */
+.cerrar {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: #f44336;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: 0.2s ease-in-out;
+}
+
+.cerrar:hover{
+    background-color: #d32f2f;
+}
+
+/* BOTONES ABRIR */
+.btn-abrir {
+    background: #557CFA;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.btn-accion {
+    background-color: #557CFA;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.btn-accion:hover {
+    background-color: #3f63d1;
+}
+
+.modal h2{
+    text-align: center;
+}
+
+.form-tarea {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.form-tarea input,
+.modal select,
+.form-tarea select   {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-tarea input:focus,
+.form-tarea select:focus {
+    border-color: #557CFA;
+    box-shadow: 0 0 5px rgba(85,124,250,0.5);
+}
 
 
-    h3 {
-        margin: 10px 0;
-        font-size: 2rem;
-        text-align: center;
-        color: #557CFA;/* mismo azul que el borde hover */
-    }
+/* Scroll en Chrome y Edge */
+.modal::-webkit-scrollbar {
+    width: 8px;
+}
+.modal::-webkit-scrollbar-thumb {
+    background: #557CFA;
+    border-radius: 8px;
+}
+.modal::-webkit-scrollbar-track {
+    background: #eee;
+}
 
-    .tarea p {
-        margin: 4px 10px;
-        /* más margen horizontal para no pegar el texto al borde */
-        font-size: 0.9rem;
-        line-height: 1.4;
-        /* hace que sea más fácil de leer */
-        color: #333;
-        /* gris oscuro en lugar de negro puro */
-    }
+/* Estilo para los <p> del modal */
+.modal p,
+.form-tarea p {
+    font-weight: bold;
+    margin: 1px;
+    color: black;
+    font-size: 0.9rem;
+}
 
-    .tarea p b {
-        color: #000;
-        /* destaca solo el label */
-        font-weight: 600;
-        /* más sutil que bold completo */
-    }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}

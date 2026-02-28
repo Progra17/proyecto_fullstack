@@ -60,41 +60,155 @@ app.get('/tarea', (req, res) => {
     });
 });
 
-//CREAR (CREATE)
-//Endpoint para crear una tarea
-app.post('/tarea', (req, res) => {
+//CREAR UN NUEVO EMPLEADO
+app.post('/empleado', (req, res) => {
     const {
-        nombre_tarea,
-        descripcion_tarea,
-        estatus_tarea,
-        comentarios_tarea,
-        fecha_inicio,
-        fecha_fin,
-        id_proyecto,
-        id_empleado
+        primer_nombre,
+        segundo_nombre,
+        apellido_paterno,
+        apellido_materno,
+        edad_empleado,
+        telefono_empleado,
+        correo_empleado,
+        puesto_empleado
     } = req.body;
 
     const sql = `
-        INSERT INTO tarea 
-        (nombre_tarea, descripcion_tarea, estatus_tarea, comentarios_tarea, fecha_inicio, fecha_fin, id_proyecto, id_empleado)
+        INSERT INTO empleado 
+        (primer_nombre,
+        segundo_nombre,
+        apellido_paterno,
+        apellido_materno,
+        edad_empleado,
+        telefono_empleado,
+        correo_empleado,
+        puesto_empleado)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     connection.query(sql, [
-        nombre_tarea,
-        descripcion_tarea,
-        estatus_tarea,
-        comentarios_tarea,
-        fecha_inicio,
-        fecha_fin,
-        id_proyecto,
-        id_empleado || null
+        primer_nombre,
+        segundo_nombre || null,
+        apellido_paterno,
+        apellido_materno || null,
+        edad_empleado,
+        telefono_empleado,
+        correo_empleado,
+        puesto_empleado
     ], (error, result) => {
         if (error) throw error;
-        res.json({ message: "Tarea creada correctamente", id: result.insertId });
+        res.json({ message: "Empleado creado correctamente", id: result.insertId });
     });
 
 });
+
+//ACTUALIZAR UN EMPLEADO
+app.put('/empleado/:id', (req, res) => {
+    const { id } = req.params; // ID del empleado a actualizar
+    const {
+        primer_nombre,
+        segundo_nombre,
+        apellido_paterno,
+        apellido_materno,
+        edad_empleado,
+        telefono_empleado,
+        correo_empleado,
+        puesto_empleado
+    } = req.body;
+
+    const sql = `
+        UPDATE empleado
+        SET primer_nombre = ?, 
+            segundo_nombre = ?, 
+            apellido_paterno = ?, 
+            apellido_materno = ?, 
+            edad_empleado = ?,
+            telefono_empleado = ?,
+            correo_empleado = ?,
+            puesto_empleado = ?
+        WHERE id_empleado = ?
+    `;
+
+    connection.query(sql, [
+        primer_nombre,
+        segundo_nombre,
+        apellido_paterno,
+        apellido_materno,
+        edad_empleado,
+        telefono_empleado,
+        correo_empleado,
+        puesto_empleado,
+        id
+    ], (error, result) => {
+        if (error) throw error;
+        res.json({ message: "Empleado actualizado correctamente", affectedRows: result.affectedRows });
+    });
+});
+
+
+//CREAR UN NUEVO PROYECTO
+app.post('/proyecto', (req, res) => {
+    const {
+        nombre_proyecto,
+        descripcion_proyecto,
+        estado_proyecto,
+        fecha_inicio,
+        fecha_fin,
+    } = req.body;
+
+    const sql = `
+        INSERT INTO proyecto 
+        (nombre_proyecto, descripcion_proyecto, estado_proyecto, fecha_inicio, fecha_fin)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    connection.query(sql, [
+        nombre_proyecto,
+        descripcion_proyecto,
+        estado_proyecto,
+        fecha_inicio,
+        fecha_fin,
+    ], (error, result) => {
+        if (error) throw error;
+        res.json({ message: "Proyecto creado correctamente", id: result.insertId });
+    });
+
+});
+
+//ACTUALIZAR UN PROYECTO
+app.put('/proyecto/:id', (req, res) => {
+    const { id } = req.params; // ID del proyecto a actualizar
+    const {
+        nombre_proyecto,
+        descripcion_proyecto,
+        estado_proyecto,
+        fecha_inicio,
+        fecha_fin,
+    } = req.body;
+
+    const sql = `
+        UPDATE proyecto
+        SET nombre_proyecto = ?, 
+            descripcion_proyecto = ?, 
+            estado_proyecto = ?, 
+            fecha_inicio = ?, 
+            fecha_fin = ?
+        WHERE id_proyecto = ?
+    `;
+
+    connection.query(sql, [
+        nombre_proyecto,
+        descripcion_proyecto,
+        estado_proyecto,
+        fecha_inicio,
+        fecha_fin,
+        id
+    ], (error, result) => {
+        if (error) throw error;
+        res.json({ message: "Proyecto actualizado correctamente", affectedRows: result.affectedRows });
+    });
+});
+
 
 //ACTUALIZAR (UPDATE)
 //Endpoint para actualizar una tarea
@@ -140,6 +254,42 @@ app.put('/tarea/:id', (req, res) => {
     });
 });
 
+//CREAR (CREATE)
+//Endpoint para crear una tarea
+app.post('/tarea', (req, res) => {
+    const {
+        nombre_tarea,
+        descripcion_tarea,
+        estatus_tarea,
+        comentarios_tarea,
+        fecha_inicio,
+        fecha_fin,
+        id_proyecto,
+        id_empleado
+    } = req.body;
+
+    const sql = `
+        INSERT INTO tarea 
+        (nombre_tarea, descripcion_tarea, estatus_tarea, comentarios_tarea, fecha_inicio, fecha_fin, id_proyecto, id_empleado)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    connection.query(sql, [
+        nombre_tarea,
+        descripcion_tarea,
+        estatus_tarea,
+        comentarios_tarea,
+        fecha_inicio,
+        fecha_fin,
+        id_proyecto,
+        id_empleado || null
+    ], (error, result) => {
+        if (error) throw error;
+        res.json({ message: "Tarea creada correctamente", id: result.insertId });
+    });
+
+});
+
 // BORRAR (DELETE)
 // Endpoint para eliminar una tarea
 app.delete('/tarea/:id', (req, res) => {
@@ -148,6 +298,20 @@ app.delete('/tarea/:id', (req, res) => {
     connection.query(sql, [id], (error, result) => {
         if (error) throw error;
         res.json({ message: "Tarea eliminada correctamente", affectedRows: result.affectedRows });
+    });
+});
+
+app.get("/empleados", (req, res) => {
+    connection.query("SELECT id_empleado, primer_nombre, apellido_paterno FROM empleado", (error, result) => {
+        if (error) return res.status(500).send(error);
+        res.json(result);
+    });
+});
+
+app.get("/proyectos", (req, res) => {
+    connection.query("SELECT id_proyecto, nombre_proyecto FROM proyecto", (error, result) => {
+        if (error) return res.status(500).send(error);
+        res.json(result);
     });
 });
 
