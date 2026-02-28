@@ -140,6 +140,17 @@ app.put('/tarea/:id', (req, res) => {
     });
 });
 
+// BORRAR (DELETE)
+// Endpoint para eliminar una tarea
+app.delete('/tarea/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = `DELETE FROM tarea WHERE id_tarea = ?`;
+    connection.query(sql, [id], (error, result) => {
+        if (error) throw error;
+        res.json({ message: "Tarea eliminada correctamente", affectedRows: result.affectedRows });
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log(`Servidor backend iniciado en http://localhost:${PORT}`);

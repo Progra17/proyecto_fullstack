@@ -13,11 +13,9 @@ export default function Tarea() {
         fecha_inicio: "",
         fecha_fin: "",
         id_proyecto: "",
-        id_empleado: null
+        id_empleado: ""
     };
 
-    //Constante para crear una tarea
-    const [tarea, setTarea] = useState([]);
     //Constante para actualizar las tareas
     const [tareas, setTareas] = useState([]);
     const [crearTarea, setCrearTarea] = useState(formatoInicial);
@@ -85,17 +83,32 @@ export default function Tarea() {
         }
     };
 
+    //Enviar solicitud de actualizacion al servidor
     const enviarActualizar = (e) => {
         e.preventDefault();
         axios.put(`http://localhost:3001/tarea/${actualizarTarea.id_tarea}`, actualizarTarea)
             .then(res => {
                 alert(res.data.message);
-                setActualizarTarea({...formatoInicial,id_tarea: ""});
+                setActualizarTarea({ ...formatoInicial, id_tarea: "" });
                 return axios.get("http://localhost:3001/tarea");
             })
             .then(res => setTareas(res.data))
             .catch(err => console.error(err));
     };
+
+    const eliminarTarea = (id) => {
+        if (window.confirm("¿Estás seguro de eliminar esta tarea?")) {
+            axios.delete(`http://localhost:3001/tarea/${id}`)
+                .then(res => {
+                    alert(res.data.message);
+                    // Refrescar lista de tareas
+                    return axios.get("http://localhost:3001/tarea");
+                })
+                .then(res => setTareas(res.data))
+                .catch(err => console.error(err));
+        }
+    };
+
 
     return (
         <div>
@@ -185,6 +198,7 @@ export default function Tarea() {
             <hr />
 
             <div className='actualizar-tarea'>
+                <h2>Actualizar tarea</h2>
                 <label>Selecciona ID de tarea:</label>
                 <select value={actualizarTarea.id_tarea} onChange={handleSelectChange}>
                     <option value="">--Selecciona una tarea--</option>
@@ -257,25 +271,30 @@ export default function Tarea() {
                         name="id_empleado"
                         value={actualizarTarea.id_empleado}
                         onChange={handleChangeActualizar}
+                        pattern="\d*"
+                        inputMode='numeric'
                     />
                     <button type="submit">Actualizar tarea</button>
                 </form>
             </div>
             <hr />
 
+            <h3>TAREAS</h3>
             <div className='contenedor-tarea'>
                 {tareas.map(t => (
                     <div className='tarea' key={t.id_tarea}>
-                        <h3>TAREAS</h3>
-                        <p>{t.id_tarea}</p>
-                        <p>{t.nombre_tarea}</p>
-                        <p>{t.descripcion_tarea}</p>
-                        <p>{t.estatus_tarea}</p>
-                        <p>{t.comentarios_tarea}</p>
-                        <p>{new Date(t.fecha_inicio).toISOString().split("T")[0]}</p>
-                        <p>{new Date(t.fecha_fin).toISOString().split("T")[0]}</p>
-                        <p>{t.id_proyecto}</p>
-                        <p>{t.id_empleado}</p>
+                        <div className='tarea-content'>
+                            <p><b>ID:</b> {t.id_tarea}</p>
+                            <p><b>NOMBRE:</b> {t.nombre_tarea}</p>
+                            <p><b>DESCRIPCIÓN:</b> {t.descripcion_tarea}</p>
+                            <p><b>ESTATUS:</b> {t.estatus_tarea}</p>
+                            <p><b>COMENTARIOS:</b> {t.comentarios_tarea}</p>
+                            <p><b>F. INICIO:</b> {new Date(t.fecha_inicio).toISOString().split("T")[0]}</p>
+                            <p><b>F. FIN:</b> {new Date(t.fecha_fin).toISOString().split("T")[0]}</p>
+                            <p><b>PROYECTO:</b> {t.id_proyecto}</p>
+                            <p><b>EMPLEADO:</b> {t.id_empleado}</p>
+                        </div>
+                        <button onClick={() => eliminarTarea(t.id_tarea)}>Eliminar</button>
                     </div>
                 ))}
             </div>
