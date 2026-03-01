@@ -49,6 +49,13 @@ export default function Proyecto() {
     const crearNuevoProyecto = (e) => {
         e.preventDefault();
 
+        const { fecha_inicio, fecha_fin} = crearProyecto;
+
+        if(fecha_fin<fecha_inicio){
+            alert("La fecha de finalizacion no puede ser menor que la de inicio");
+            return;
+        }
+
         axios.post("http://localhost:3001/proyecto", crearProyecto)
             .then(() => {
                 alert("Proyecto creado correctamente"); //Mensaje de registro exitoso
@@ -64,6 +71,13 @@ export default function Proyecto() {
     //Enviar solicitud de actualizacion al servidor
     const enviarActualizar = (e) => {
         e.preventDefault();
+
+        const { fecha_inicio, fecha_fin} = actualizarProyecto;
+
+        if(fecha_fin<fecha_inicio){
+            alert("La fecha de finalizacion no puede ser menor que la de inicio");
+            return;
+        }
 
         //Enviamos la solicitud de actualizacion con el metodo put, donde pasamos el ID del proyecto
         axios.put(`http://localhost:3001/proyecto/${actualizarProyecto.id_proyecto}`, actualizarProyecto)
