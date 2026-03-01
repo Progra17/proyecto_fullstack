@@ -368,7 +368,6 @@ export default function Tarea() {
                                 value={actualizarTarea.id_empleado}
                                 onChange={handleChangeActualizar}
                             >
-                                <option value="">--SELECCIONA UN EMPLEADO--</option>
                                 {empleados.map(emp => ( //Se mapean los empleados y se listan
                                     <option key={emp.id_empleado} value={emp.id_empleado}>
                                         {emp.id_empleado} - {emp.primer_nombre} {emp.apellido_paterno}
