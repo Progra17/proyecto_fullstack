@@ -17,58 +17,121 @@ export default function Empleado() {
         puesto_empleado: ""
     };
 
+    //Constante para cargar la lista de empleados
     const [empleado, setEmpleado] = useState([]);
+    //Constante para el formulario de crear empleado
     const [crearEmpleado, setCrearEmpleado] = useState(formatoInicial);
+    //Constante para el formulario de actualizar empleado
     const [actualizarEmpleado, setActualizarEmpleado] = useState(formatoInicial);
 
+    //Constantes para los modales que se utilizan para los formularios
     const [modalCrear, setModalCrear] = useState(false);
     const [modalActualizar, setModalActualizar] = useState(false);
 
-    // Cargar empleados
+    // Cargar todos los empleados que hay
     useEffect(() => {
         axios.get("http://localhost:3001/empleado")
             .then(res => setEmpleado(res.data))
             .catch(err => console.error(err));
     }, []);
 
-    // Cambios para crear
+    // Guarda los datos conforme se vayan generando cambios en el formulario de creacion
     const handleChangeCrear = (e) => {
         const { name, value } = e.target;
         setCrearEmpleado(prev => ({ ...prev, [name]: value }));
     };
 
-    // Cambios para actualizar
+    // Guarda los datos conforme se vayan generando cambios en el formulario de actualizacion
     const handleChangeActualizar = (e) => {
         const { name, value } = e.target;
         setActualizarEmpleado(prev => ({ ...prev, [name]: value }));
     };
 
-    // Crear Empleado
+    // Metodo para mandar la solicitud de creacion del empleado
     const crearNuevoEmpleado = (e) => {
         e.preventDefault();
 
+        //Extaremos los valores para las constantes y verificar que cumplan las caracteristicas especificadas
+        const { edad_empleado, telefono_empleado, correo_empleado, puesto_empleado } = crearEmpleado;
+
+        //Edad mínima
+        if (edad_empleado < 18) {
+            alert("La edad mínima es 18 años.");
+            return;
+        }
+
+        //Validar teléfono EXACTAMENTE 10 dígitos
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(telefono_empleado)) {
+            alert("El teléfono debe tener exactamente 10 dígitos numéricos.");
+            return;
+        }
+
+        //Validar correo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(correo_empleado)) {
+            alert("El correo no es válido.");
+            return;
+        }
+
+        if(puesto_empleado === "" || null){
+            alert("Debe seleccionar un puesto para el empleado")
+            return;
+        }
+
+        //Enviamos la solicitud con el metodo post
         axios.post("http://localhost:3001/empleado", crearEmpleado)
             .then(() => {
-                alert("Empleado creado correctamente");
-                setCrearEmpleado(formatoInicial);
-                setModalCrear(false);
-                return axios.get("http://localhost:3001/empleado");
+                alert("Empleado creado correctamente"); //Mensaje de registro exitoso
+                setCrearEmpleado(formatoInicial); //Formateamos en blanco el formulario
+                setModalCrear(false); //Cerramos el modal
+                return axios.get("http://localhost:3001/empleado"); //Regresamos la lista de empleados actualizados
             })
-            .then(res => setEmpleado(res.data))
+            .then(res => setEmpleado(res.data)) //Insertamos los cambios en la lista que almacena los empleados
             .catch(err => console.error(err));
     };
 
     // Actualizar Empleado
     const enviarActualizar = (e) => {
         e.preventDefault();
+
+        //Extaremos los valores para las constantes y verificar que cumplan las caracteristicas especificadas
+        const { edad_empleado, telefono_empleado, correo_empleado, puesto_empleado } = actualizarEmpleado;
+
+        //Edad mínima
+        if (edad_empleado < 18) {
+            alert("La edad mínima es 18 años.");
+            return;
+        }
+
+        //Validar teléfono EXACTAMENTE 10 dígitos
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(telefono_empleado)) {
+            alert("El teléfono debe tener exactamente 10 dígitos numéricos.");
+            return;
+        }
+
+        //Validar correo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(correo_empleado)) {
+            alert("El correo no es válido.");
+            return;
+        }
+
+         if(puesto_empleado === "" || null){
+            alert("Debe seleccionar un puesto para el empleado")
+            return;
+        }
+
+        //Enviamos la solicitud de actualizacion con el metodo put, donde pasamos el ID del empleado
         axios.put(`http://localhost:3001/empleado/${actualizarEmpleado.id_empleado}`, actualizarEmpleado)
             .then(res => {
-                alert(res.data.message);
-                setActualizarEmpleado({ ...formatoInicial, id_empleado: "" });
-                setModalActualizar(false);
-                return axios.get("http://localhost:3001/empleado");
+                alert(res.data.message); //Obtenemos el mensaje de actualizacion exitosa
+                setActualizarEmpleado({ ...formatoInicial, id_empleado: "" }); //Se limpia el formulario
+                setModalActualizar(false); //Cerramos el modal del formulario
+                return axios.get("http://localhost:3001/empleado"); //Retornamos la lista actualizada
             })
-            .then(res => setEmpleado(res.data))
+            .then(res => setEmpleado(res.data)) //Seteamos los datos en la constante que lista los empleados
             .catch(err => console.error(err));
     };
 
@@ -76,8 +139,10 @@ export default function Empleado() {
     const handleSelectChange = (e) => {
         const id = e.target.value;
 
+        //Extraemos el valor del ID que se obtiene del select en el formulario de actualizar
         const empleadoSeleccionado = empleado.find(emp => emp.id_empleado.toString() === id);
 
+        //Rellenamos los datos con los campos con los que cuenta el ID
         if (empleadoSeleccionado) {
             setActualizarEmpleado({
                 id_empleado: id,
@@ -91,7 +156,7 @@ export default function Empleado() {
                 puesto_empleado: empleadoSeleccionado.puesto_empleado
             });
         } else {
-            setActualizarEmpleado(formatoInicial);
+            setActualizarEmpleado(formatoInicial); //Si no selecciona un ID valido, formatea todo en blanco
         }
     };
 
@@ -99,7 +164,8 @@ export default function Empleado() {
         <div>
             <Barra_superior />
             <h3>EMPLEADOS</h3>
-
+            
+            {/*Botones para actualizar y crear un empleado*/}
             <div className='botones'>
                 <button className="btn-abrir" onClick={() => setModalCrear(true)}>
                     CREAR EMPLEADO
@@ -130,9 +196,15 @@ export default function Empleado() {
                                 value={crearEmpleado.apellido_materno} onChange={handleChangeCrear} />
 
                             <input type="number" name="edad_empleado" placeholder="Edad"
-                                value={crearEmpleado.edad_empleado} onChange={handleChangeCrear} required />
+                                value={crearEmpleado.edad_empleado} onChange={handleChangeCrear}
+                                onKeyDown={(e) => { //Regla de validacion para los campos numericos
+                                    if (["e", "E", "+", "-", "."].includes(e.key)) {
+                                        e.preventDefault();
+                                    }
+                                }}
+                                required />
 
-                            <input type="text" name="telefono_empleado" placeholder="Teléfono"
+                            <input type="text" name="telefono_empleado" placeholder="Teléfono" maxLength={10}
                                 value={crearEmpleado.telefono_empleado} onChange={handleChangeCrear} required />
 
                             <input type="email" name="correo_empleado" placeholder="Correo"
@@ -167,7 +239,7 @@ export default function Empleado() {
                         <p>Selecciona el empleado:</p>
                         <select value={actualizarEmpleado.id_empleado} onChange={handleSelectChange}>
                             <option value="">--SELECCIONA UN EMPLEADO--</option>
-                            {empleado.map(emp => (
+                            {empleado.map(emp => ( //Extaremos cada empleado y de ellos ciertos atributos para listar
                                 <option key={emp.id_empleado} value={emp.id_empleado}>
                                     {emp.id_empleado} - {emp.primer_nombre} {emp.apellido_paterno}
                                 </option>
@@ -190,13 +262,19 @@ export default function Empleado() {
 
                             <input type="text" name="apellido_materno"
                                 value={actualizarEmpleado.apellido_materno}
-                                onChange={handleChangeActualizar}  />
+                                onChange={handleChangeActualizar} />
 
                             <input type="number" name="edad_empleado"
                                 value={actualizarEmpleado.edad_empleado}
-                                onChange={handleChangeActualizar} required />
+                                onChange={handleChangeActualizar} required
+                                onKeyDown={(e) => {
+                                    if (["e", "E", "+", "-", "."].includes(e.key)) {
+                                        e.preventDefault();
+                                    }
+                                }}
+                            />
 
-                            <input type="text" name="telefono_empleado"
+                            <input type="text" name="telefono_empleado" maxLength={10}
                                 value={actualizarEmpleado.telefono_empleado}
                                 onChange={handleChangeActualizar} required />
 
@@ -229,9 +307,8 @@ export default function Empleado() {
             <div className='contenedor-empleado'>
                 {empleado.map(e => (
                     <div className='empleado' key={e.id_empleado}>
-                        <h3>{e.primer_nombre} {e.apellido_paterno}</h3>
+                        <h3>{e.primer_nombre} {e.segundo_nombre} {e.apellido_paterno} {e.apellido_materno}</h3>
                         <p><b>ID:</b> {e.id_empleado}</p>
-                        <p><b>Segundo nombre:</b> {e.segundo_nombre}</p>
                         <p><b>Edad:</b> {e.edad_empleado}</p>
                         <p><b>Teléfono:</b> {e.telefono_empleado}</p>
                         <p><b>Correo:</b> {e.correo_empleado}</p>

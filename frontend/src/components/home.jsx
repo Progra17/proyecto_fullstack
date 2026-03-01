@@ -11,6 +11,7 @@ export default function Home() {
     return (
         <div>
             <Barra_superior />
+            <h1>BIENVENIDO</h1>
         </div>
 
     )

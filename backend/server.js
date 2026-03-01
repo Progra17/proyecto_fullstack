@@ -52,7 +52,7 @@ app.get('/empleado', (req, res) => {
     });
 });
 
-//Endpoint para obtener todas las tareas
+//Endpoint para obtener todas las tareas cruzadas con los empleados y los proyectos, asi se puede mostrar el nombre
 app.get('/tarea', (req, res) => {
     const sql = `
         SELECT 
@@ -313,6 +313,8 @@ app.delete('/tarea/:id', (req, res) => {
     });
 });
 
+
+//GETS QUE PERMITEN EXTRAER LOS ATRIBUTOS PARA PODERLOS AÑADIR AL SELECT CORRESPONDIENTE
 app.get("/empleados", (req, res) => {
     connection.query("SELECT id_empleado, primer_nombre, apellido_paterno FROM empleado", (error, result) => {
         if (error) return res.status(500).send(error);
@@ -327,7 +329,7 @@ app.get("/proyectos", (req, res) => {
     });
 });
 
-
+//AVISO DE QUE SE ESTA CORRIENDO EL SERVIDOR
 app.listen(PORT, () => {
     console.log(`Servidor backend iniciado en http://localhost:${PORT}`);
 });

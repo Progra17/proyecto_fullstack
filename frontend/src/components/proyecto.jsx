@@ -15,38 +15,46 @@ export default function Proyecto() {
         fecha_fin: ""
     };
 
+    //Constante para cargar la lista de proyectos
     const [proyecto, setProyecto] = useState([]);
+    //Constante para el formulario de crear proyecto
     const [crearProyecto, setCrearProyecto] = useState(formatoInicial);
+    //Constante para el formulario de actualizar proyecto
     const [actualizarProyecto, setActualizarProyecto] = useState(formatoInicial);
 
+    //Constantes para los modales que se utilizan para los formularios
     const [modalCrear, setModalCrear] = useState(false);
     const [modalActualizar, setModalActualizar] = useState(false);
 
+    // Cargamos todos los proyectos que hay
     useEffect(() => { //Se ejecuta cada que se renderiza
         axios.get("http://localhost:3001/proyecto") //Se hace la peticion al servidor
             .then(res => setProyecto(res.data)) //Con setNotas se almacena el contendio
             .catch(err => console.error(err));
     }, []);
 
+    // Guarda los datos conforme se vayan generando cambios en el formulario de creacion
     const handleChangeCrear = (e) => {
         const { name, value } = e.target;
         setCrearProyecto(prev => ({ ...prev, [name]: value }));
     };
 
+    // Guarda los datos conforme se vayan generando cambios en el formulario de actualizacion
     const handleChangeActualizar = (e) => {
         const { name, value } = e.target;
         setActualizarProyecto(prev => ({ ...prev, [name]: value }));
     };
 
+    //Enviamos la solicitud con el metodo post
     const crearNuevoProyecto = (e) => {
         e.preventDefault();
 
         axios.post("http://localhost:3001/proyecto", crearProyecto)
             .then(() => {
-                alert("Proyecto creado correctamente");
-                setCrearProyecto(formatoInicial);
-                setModalCrear(false);
-                return axios.get("http://localhost:3001/proyecto");
+                alert("Proyecto creado correctamente"); //Mensaje de registro exitoso
+                setCrearProyecto(formatoInicial); //Formateamos en blanco el formulario
+                setModalCrear(false); //Cerramos el modal
+                return axios.get("http://localhost:3001/proyecto"); //Retornamos la lista actualizada
             })
             //Mostramos las tareas actualizadas
             .then(res => setProyecto(res.data))
@@ -56,6 +64,8 @@ export default function Proyecto() {
     //Enviar solicitud de actualizacion al servidor
     const enviarActualizar = (e) => {
         e.preventDefault();
+
+        //Enviamos la solicitud de actualizacion con el metodo put, donde pasamos el ID del proyecto
         axios.put(`http://localhost:3001/proyecto/${actualizarProyecto.id_proyecto}`, actualizarProyecto)
             .then(res => {
                 alert(res.data.message);
@@ -70,8 +80,11 @@ export default function Proyecto() {
     //Permite manejar la seleccion de IDs para ACTUALIZAR EL PROYECTO
     const handleSelectChange = (e) => {
         const id = e.target.value;
-
+        
+        //Extraemos el valor del ID que se obtiene del select en el formulario de actualizar
         const proyectoSeleccionado = proyecto.find(p => p.id_proyecto.toString() === id);
+
+        //Rellenamos los datos con los campos con los que cuenta el ID
         if (proyectoSeleccionado) {
             setActualizarProyecto({
                 id_proyecto: id,
@@ -88,9 +101,11 @@ export default function Proyecto() {
 
     return (
         <div>
-
             <Barra_superior />
+
             <h3>PROYECTOS</h3>
+
+            {/*Botones para actualizar y crear un proyecto*/}
             <div className='botones'>
                 <button className="btn-abrir" onClick={() => setModalCrear(true)}>
                     CREAR PROYECTO
@@ -169,7 +184,7 @@ export default function Proyecto() {
                         <h2>ACTUALIZAR PROYECTO</h2>
 
                         <p>SELECCIONA EL PROYECTO:</p>
-                        <select
+                        <select //Extaremos cada proyecto y de ellos ciertos atributos para listar
                             value={actualizarProyecto.id_proyecto} onChange={handleSelectChange}>
                             <option value="">--SELECCIONA UN PROYECTO--</option>
                             {proyecto.map(p => (
@@ -233,6 +248,8 @@ export default function Proyecto() {
                 </div>
             )}
 
+            
+            {/*LISTA DE PROYECTOS*/}
             <div className='contenedor-proyecto'>
                 {proyecto.map(p => (
                     <div className='proyecto' key={p.id_proyecto}>
@@ -240,8 +257,8 @@ export default function Proyecto() {
                         <p><b>ID:</b> {p.id_proyecto}</p>
                         <p><b>DESCRIPCIÓN:</b> {p.descripcion_proyecto}</p>
                         <p><b>ESTADO:</b> {p.estado_proyecto}</p>
-                        <p><b>F. INCIO:</b> {new Date(p.fecha_inicio).toISOString().split("T")[0]}</p>
-                        <p><b>F. FIN:</b> {new Date(p.fecha_fin).toISOString().split("T")[0]}</p>
+                        <p><b>FECHA DE INCIO:</b> {new Date(p.fecha_inicio).toISOString().split("T")[0]}</p>
+                        <p><b>FECHA DE FIN:</b> {new Date(p.fecha_fin).toISOString().split("T")[0]}</p>
                     </div>
                 ))}
             </div>
