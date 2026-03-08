@@ -1,1 +1,12 @@
+name: Flujo1
+on: 
+  push:
+jobs:
+  notificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+      - name: Notificacion
+        run: echo "Se ha hecho el push con exito"
 
