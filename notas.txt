@@ -20,4 +20,15 @@ npm install axios
 npm install react-router-dom
 
 
-SE CREA LA NUEVA RAMA "desarrollo"
+--- DOCKER ---
+Se crean los archivos "Dockerfile" tanto en frontend como backend
+Se crea el archivo docker-compose.yml con la configuracion del entorno
+Se crean los archivos .dockerignore tanto en frontend como backend para evitar cargar las variables de entorno
+que se cargan cuando se hace npm install
+
+Desde MySQL Workbench se exporto la informacion que ya se tenia guardada Server -> Data export -> Se selecciona la BD 
+(fullstack) -> Se marca la opcion "Export to Self-Contained File" -> Export progress -> Start export
+
+Se crea una carpeta en el proyecto mysql/init y aqui se guarda el archivo creado con la opcion "Export to self..."
+
+En la raiz del proyecto se corre el comando "docker compose up --build" esto crea el contenedor y lo levanta
