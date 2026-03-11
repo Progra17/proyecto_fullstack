@@ -1,6 +1,6 @@
 const express = require('express'); //Importamos la librera express para poder crear un servidor en Node
 const cors = require('cors') //Importamos la libreria cors para poder hacer peticiones entre frontend y backend
-const mysql = require('mysql') //Importamos mysql
+const mysql = require('mysql2') //Importamos mysql
 
 const app = express(); //Creamos una instancia de la aplicacion, utilizando la libreria express
 app.use(cors()); //Habilita que el frontend pueda hacer peticiones a este servidor
@@ -10,10 +10,10 @@ const PORT = 3001; //Definimos en que puerto se levantara el servidor
 
 //Configuracion para conectar a la base de datos
 const connection = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'fullstack',
+    host: process.env.DB_HOST ,
+    user: process.env.DB_USER ,
+    password: process.env.DB_PASSWORD ,
+    database: process.env.DB_NAME,
 });
 
 //Conexion con la base de datos
