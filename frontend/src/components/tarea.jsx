@@ -210,6 +210,7 @@ export default function Tarea() {
                                 value={crearTarea.estatus_tarea}
                                 onChange={handleChange}
                             >
+                                <option value="">--Selecciona un estatus--</option>
                                 <option>Pendiente</option>
                                 <option>En proceso</option>
                                 <option>En pruebas</option>

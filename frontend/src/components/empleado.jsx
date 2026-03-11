@@ -288,6 +288,7 @@ export default function Empleado() {
                                 onChange={handleChangeActualizar}
                                 required
                             >
+                                <option value="">--Selecciona un puesto--</option>
                                 <option value="Diseñador">Diseñador</option>
                                 <option value="Programador">Programador</option>
                                 <option value="Coordinador">Coordinador</option>

@@ -161,6 +161,7 @@ export default function Proyecto() {
                                 onChange={handleChangeCrear}
                                 required
                             >
+                                <option value="">--Selecciona un estado--</option>
                                 <option value="Pendiente de aprobación">Pendiente de aprobación</option>
                                 <option value="En proceso">En proceso</option>
                                 <option value="En pruebas">En pruebas</option>
