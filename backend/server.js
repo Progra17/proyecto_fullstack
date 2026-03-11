@@ -10,10 +10,10 @@ const PORT = 3001; //Definimos en que puerto se levantara el servidor
 
 //Configuracion para conectar a la base de datos
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '2Link001',
-    database: 'fullstack',
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'fullstack',
 });
 
 //Conexion con la base de datos
