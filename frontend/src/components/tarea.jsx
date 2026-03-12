@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import "./tarea.css"
 import Barra_superior from './barra_superior';
+import socket from '../socket';
 
 export default function Tarea() {
     // Valores iniciales del formulario
@@ -31,21 +32,39 @@ export default function Tarea() {
     const [empleados, setEmpleados] = useState([]);
     const [proyectos, setProyectos] = useState([]);
 
-    //CARGAMOS TODAS LAS TAREAS
-    useEffect(() => { //Se ejecuta cada que se renderiza
-        axios.get("http://localhost:3001/tarea") //Se hace la peticion al servidor para cargar todas las tareas
+    const obtenerTareas = () => {
+        axios.get("http://localhost:3001/tarea")
             .then(res => setTareas(res.data))
             .catch(err => console.error(err));
+    };
 
-        axios.get("http://localhost:3001/empleados") //Se hace la peticion al servidor para cargar todos los empleados
+    // 2. useEffect para CARGA INICIAL (Solo una vez al montar)
+    useEffect(() => {
+        obtenerTareas();
+
+        axios.get("http://localhost:3001/empleados")
             .then(res => setEmpleados(res.data))
             .catch(err => console.error(err));
 
-        axios.get("http://localhost:3001/proyectos") //Se hace la peticion al servidor para cargar todos los proyectos
+        axios.get("http://localhost:3001/proyectos")
             .then(res => setProyectos(res.data))
             .catch(err => console.error(err));
-
     }, []);
+
+    // 3. useEffect para SOCKETS (Escuchar cambios en tiempo real)
+    useEffect(() => {
+        const manejarActualizacion = () => {
+            console.log("El servidor avisó: actualizando lista de tareas...");
+            obtenerTareas();
+        };
+
+        socket.on("tareas_actualizadas", manejarActualizacion);
+
+        // Limpieza fundamental para evitar que se sature el navegador
+        return () => {
+            socket.off("tareas_actualizadas", manejarActualizacion);
+        };
+    }, []); // Se suscribe una sola vez al conectar el componente
 
     // Cuando lleguen los proyectos desde el backend,
     // asigna automáticamente el primero al formulario de crear para evitar tener vacios
@@ -128,7 +147,6 @@ export default function Tarea() {
     //Enviar solicitud de actualizacion al servidor
     const enviarActualizar = (e) => {
         e.preventDefault();
-
         const { fecha_inicio, fecha_fin } = actualizarTarea;
 
         // 1. Validar fechas
@@ -140,12 +158,13 @@ export default function Tarea() {
         //Enviamos la solicitud de actualizacion con el metodo put, donde pasamos el ID del proyecto
         axios.put(`http://localhost:3001/tarea/${actualizarTarea.id_tarea}`, actualizarTarea)
             .then(res => {
-                alert(res.data.message);
+                //1. Mensaje exitoso de actualizacion
+                alert("Actualizacion guardada");
+
+                // 2. Limpiar el formulario y cerrar el modal
                 setActualizarTarea({ ...formatoInicial, id_tarea: "" });
                 setModalActualizar(false);
-                return axios.get("http://localhost:3001/tarea");
             })
-            .then(res => setTareas(res.data))
             .catch(err => console.error(err));
     };
 
@@ -277,7 +296,7 @@ export default function Tarea() {
                     </div>
                 </div>
             )}
-            
+
             {/*MODAL PARA ACTUALIZAR*/}
             {modalActualizar && (
                 <div className="modal-fondo" onClick={() => setModalActualizar(false)}>
@@ -396,7 +415,7 @@ export default function Tarea() {
                             <p><b>FECHA DE INICIO:</b> {new Date(t.fecha_inicio).toISOString().split("T")[0]}</p>
                             <p><b>FECHA DE FIN:</b> {new Date(t.fecha_fin).toISOString().split("T")[0]}</p>
                             {/*AQUI SE EXTRAE EL NOMBRE GRACIAS A LA CONSULTA JOIN*/}
-                            <p><b>PROYECTO:</b> {t.nombre_proyecto}</p> 
+                            <p><b>PROYECTO:</b> {t.nombre_proyecto}</p>
                             {/*AQUI SE EXTRAE EL NOMBRE GRACIAS A LA CONSULTA JOIN*/}
                             <p><b>EMPLEADO:</b> {t.nombre_empleado}</p>
                         </div>

@@ -2,17 +2,32 @@ const express = require('express'); //Importamos la librera express para poder c
 const cors = require('cors') //Importamos la libreria cors para poder hacer peticiones entre frontend y backend
 const mysql = require('mysql2') //Importamos mysql
 
+// HTTP server + WebSocket
+const http = require("http");
+const { Server } = require("socket.io");
+
+
 const app = express(); //Creamos una instancia de la aplicacion, utilizando la libreria express
 app.use(cors()); //Habilita que el frontend pueda hacer peticiones a este servidor
 app.use(express.json()); //Permite que Express pueda leer objetos JSON enviados desde el frontend.
+
+// Servidor HTTP que envuelve Express
+const server = http.createServer(app);
+
+// Servidor WebSocket
+const io = new Server(server, {
+    cors: {
+        origin: "*"
+    }
+});
 
 const PORT = 3001; //Definimos en que puerto se levantara el servidor
 
 //Configuracion para conectar a la base de datos
 const connection = mysql.createConnection({
-    host: process.env.DB_HOST ,
-    user: process.env.DB_USER ,
-    password: process.env.DB_PASSWORD ,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 });
 
@@ -262,6 +277,9 @@ app.put('/tarea/:id', (req, res) => {
         id
     ], (error, result) => {
         if (error) throw error;
+
+        io.emit("tareas_actualizadas");
+
         res.json({ message: "Tarea actualizada correctamente", affectedRows: result.affectedRows });
     });
 });
@@ -297,6 +315,9 @@ app.post('/tarea', (req, res) => {
         id_empleado || null
     ], (error, result) => {
         if (error) throw error;
+
+        io.emit("tareas_actualizadas");
+
         res.json({ message: "Tarea creada correctamente", id: result.insertId });
     });
 
@@ -309,6 +330,9 @@ app.delete('/tarea/:id', (req, res) => {
     const sql = `DELETE FROM tarea WHERE id_tarea = ?`;
     connection.query(sql, [id], (error, result) => {
         if (error) throw error;
+
+        io.emit("tareas_actualizadas");
+
         res.json({ message: "Tarea eliminada correctamente", affectedRows: result.affectedRows });
     });
 });
@@ -329,7 +353,17 @@ app.get("/proyectos", (req, res) => {
     });
 });
 
+io.on("connection", socket => {
+    console.log("Cliente conectado:", socket.id);
+
+    // En lugar de enviarlo directo, esperamos a que el cliente lo pida o confirme
+    socket.on("estoy_listo", () => {
+        socket.emit("saludo", "Hola desde el servidor! Ahora sí estás listo.");
+    });
+});
+
 //AVISO DE QUE SE ESTA CORRIENDO EL SERVIDOR
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Servidor backend iniciado en http://localhost:${PORT}`);
 });
+
