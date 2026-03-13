@@ -278,6 +278,7 @@ app.put('/tarea/:id', (req, res) => {
     ], (error, result) => {
         if (error) throw error;
 
+        //EMITE EL EVENTO TAREAS_ACTUALIZADAS
         io.emit("tareas_actualizadas");
 
         res.json({ message: "Tarea actualizada correctamente", affectedRows: result.affectedRows });
@@ -316,6 +317,7 @@ app.post('/tarea', (req, res) => {
     ], (error, result) => {
         if (error) throw error;
 
+        //EMITE EL EVENTO TAREAS_ACTUALIZADAS
         io.emit("tareas_actualizadas");
 
         res.json({ message: "Tarea creada correctamente", id: result.insertId });
@@ -331,6 +333,7 @@ app.delete('/tarea/:id', (req, res) => {
     connection.query(sql, [id], (error, result) => {
         if (error) throw error;
 
+        //EMITE EL EVENTO TAREAS_ACTUALIZADAS
         io.emit("tareas_actualizadas");
 
         res.json({ message: "Tarea eliminada correctamente", affectedRows: result.affectedRows });
@@ -353,11 +356,15 @@ app.get("/proyectos", (req, res) => {
     });
 });
 
+
+//Escuchamos cuando cualquier navegador abre la pagina
 io.on("connection", socket => {
+    //Imprimimos el ID de esa conexion
     console.log("Cliente conectado:", socket.id);
 
-    // En lugar de enviarlo directo, esperamos a que el cliente lo pida o confirme
+    //Esperamos a que la pagina home "publique" o emita el evento "estoy_listo"
     socket.on("estoy_listo", () => {
+        //Cuando se recibe el evento estoy listo, ahora el servidor emite el evento "saludo"
         socket.emit("saludo", "Hola desde el servidor! Ahora sí estás listo.");
     });
 });

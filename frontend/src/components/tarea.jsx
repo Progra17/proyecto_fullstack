@@ -32,6 +32,7 @@ export default function Tarea() {
     const [empleados, setEmpleados] = useState([]);
     const [proyectos, setProyectos] = useState([]);
 
+    //Se establece una constante para obtener las tareas 
     const obtenerTareas = () => {
         axios.get("http://localhost:3001/tarea")
             .then(res => setTareas(res.data))

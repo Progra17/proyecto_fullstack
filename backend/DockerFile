@@ -1,14 +1,21 @@
 #ARCHIVO DOCKER PARA BACKEND
+# Base de Node.js 18 para asegurar compatibilidad y estabilidad
 FROM node:18
 
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
+# Copia los archivos de dependencias para instalar antes el cache
 COPY package*.json ./
 
+# Instala las dependencias
 RUN npm install
 
+# Copia todo el código fuente al contenedor
 COPY . .
 
+# Expone el puerto 3001 para conectar con el frontend y otros servicios
 EXPOSE 3001
 
+# Comando por defecto para ejecutar el servidor
 CMD ["node", "server.js"]

@@ -1,16 +1,23 @@
 #ARCHIVO DOCKER PARA FRONTEND
+# Base de Node.js 18
 FROM node:18
 
+# Directorio de trabajo
 WORKDIR /app
 
+# Configuración para que Chokidar funcione correctamente en entornos de contenedor
+#permite que la herramienta de watch de Node (Chokidar) detecte cambios en archivos dentro del contenedor
 ENV CHOKIDAR_USEPOLLING=true
 
+# Copia e instala dependencias
 COPY package*.json ./
-
 RUN npm install
 
+# Copia todo el código fuente del frontend
 COPY . .
 
+# Expone el puerto 3000 para acceder desde el navegador
 EXPOSE 3000
 
+# Comando por defecto para iniciar el frontend
 CMD ["npm", "start"]
