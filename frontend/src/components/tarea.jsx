@@ -174,10 +174,7 @@ export default function Tarea() {
             axios.delete(`http://localhost:3001/tarea/${id}`)
                 .then(res => {
                     alert(res.data.message);//Mensaje de borrado exitoso
-                    // Refrescar lista de tareas
-                    return axios.get("http://localhost:3001/tarea");
                 })
-                .then(res => setTareas(res.data))
                 .catch(err => console.error(err));
         }
     };
